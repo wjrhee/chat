@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-var User = require('../models/db');
+var models = require('../models/db');
+var User = models.User;
 
 
 router.get('/', function(req, res, next){
@@ -11,7 +12,6 @@ router.get('/', function(req, res, next){
 
 
 router.post('/signup', function(req, res, next){
-  // console.log(User);
   User.findOrCreate({
     where: {
       name: req.body.name,
@@ -24,7 +24,6 @@ router.post('/signup', function(req, res, next){
   .catch(next);
 
 })
-
 
 // router for logging in.
 // router will take the username and password as params

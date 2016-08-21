@@ -6,12 +6,15 @@ var socketio = require('socket.io');
 var io = socketio(server);
 var path = require('path');
 var bodyParser = require('body-parser');
-var User = require('./models/db');
+var models = require('./models/db');
+var User = models.User;
+var Message = models.Message;
 
 
 // app.set('views', __dirname + '/views');
 // app.set('view engine', 'html');
 // app.engine('html', swig.renderFile);
+
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
@@ -33,9 +36,11 @@ io.on('connection', function(socket){
 console.log(User);
 User.sync({force:true})
 .then(function(){
-
-  server.listen(3000, function(){
-    console.log('listening on 3000');
+  Message.sync({force:true})
+  .then(function(){
+    server.listen(3000, function(){
+      console.log('listening on 3000');
+    })
   })
 })
 .catch(console.error);

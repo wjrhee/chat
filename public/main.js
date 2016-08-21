@@ -1,3 +1,6 @@
+
+
+
 // the people object will hold all of the online users.  it will match the socket id with the username
 var people = {};
 
@@ -11,6 +14,21 @@ $('#chatbox').submit(function(){
 });
 socket.on('chat message', function(msg){
   $('#message').append($('<li>').text(people[socket.id] + ': ' + msg));
+  $.ajax({
+    url:"/",
+    type: "POST",
+    data: {
+      message: msg,
+      name: people[socket.id]
+    },
+    success: function(){
+      console.log('message submitted');
+    },
+    error: function(){
+      console.log('error in submitting message');
+    }
+  })
+
 });
 
 // on signing in, send an ajax post request to the server
@@ -64,7 +82,6 @@ $('#login-btn').on('click', function(e){
 
 })
 
-$('#decode').on('click', function(){
-  console.log(x);
-  // decode(x);
-})
+
+// ADD HTML AND CSS AND STORE MESSAGES IN THE DATABASE
+// ADD MESSAGES TO THE DATABASE.  CHECK THE AJAX AND FINISH THE EXPRESS ROUTING

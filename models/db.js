@@ -34,7 +34,18 @@ var User = db.define('user', {
 
 })
 
-//set up table for messages and link to users?
+var Message = db.define('Message', {
+  message: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  }
+})
 
+User.belongsToMany(Message, {through: 'user_message'});
 
-module.exports = User;
+//set up table for messages and link to users
+
+module.exports = {
+  User: User,
+  Message: Message
+};
