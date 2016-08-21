@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    mychatapp
+  </title>
+</head>
+<body>
+<div id="logger"></div>
+<div id="message"></div>
+<form action="/">
+  <input id="m" autocomplete="off"/><button>send</button>
+</form>
+<form action="/login">
+  <label>username</label>
+  <input id="username-login" autocomplete="off"/>
+  <label>password</label>
+  <input id="password-login" autocomplete="off"/>
+  <button id="login-btn">login</button>
+</form>
+<form action="/signup">
+  <input id="username-signup" autocomplete="off"/>
+  <input id="password-signup" autocomplete="off"/>
+  <button id="signup-btn">sign up</button>
+</form>
+<button id="decode">decode</button>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<script src="/md5.js"></script>
+<script src="/sha3.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/main.js"></script>
+<script>
+
+</script>
+
+</html>
