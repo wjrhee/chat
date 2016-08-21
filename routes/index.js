@@ -3,14 +3,13 @@ var router = express.Router();
 var path = require('path');
 var User = require('../models/db');
 
+
 router.get('/', function(req, res, next){
   res.sendFile(path.join(__dirname, '../views', 'index.html'));
-  // res.send('hello');
+
 });
 
-router.post('/login', function(req, res, next){
-  res.send('hello');
-})
+
 router.post('/signup', function(req, res, next){
   // console.log(User);
   User.findOrCreate({
@@ -20,44 +19,46 @@ router.post('/signup', function(req, res, next){
     }
   })
   .then(function(){
-    res.redirect('/');
-
+    res.redirect('../');
   })
   .catch(next);
 
 })
+
+
+// router for logging in.
+// router will take the username and password as params
+
 router.get('/login/:userName/:pw', function(req, res, next){
-  console.log(req.params.userName);
-  console.log(req.params.pw);
-  // res.send('hello');
+
+// search the database for the specified user
   User.findOne({
     where: {
       name: req.params.userName
     }
   })
   .then(function(foundUser){
-    // pw = req.params.pw;
-    // console.log(foundUser);
+    // if the user is found, check if the password matches.
+    // the password is hashed on the client side and then again on the server side
+    // the real password is never sent to the server
+    var foundUserName = null;
     var checkPass = User.returnEncrypted(req.params.pw);
     if (checkPass === foundUser.password){
       console.log('found!');
+      foundUserName = foundUser.name;
     }
     else {
       console.log('nope');
     }
-    // need to send to database using getter method? and hash with the getter?
+    // if the passwords match, the username is returned, if not, null is returned
+    res.send(foundUserName);
 
   })
-  .then(function(){
-    res.send('hello');
-  })
-  .catch(next);
 
-  // User.find();
-  // search for user and verify the password.
-  // search for user
-  // hash password with client side key  then hash again on the server side and check to see if the password matches the password stored for the user.
-  //
+  .catch(function(err){
+    console.log('user name does not exist');
+    next(err);
+  });
 })
 
 module.exports = router;
