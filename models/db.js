@@ -5,7 +5,7 @@ var db = new Sequelize('postgres://localhost:5432/chat',{
 });
 
 // user database with the user name, and passwords
-var User = db.define('user', {
+var User = db.define('User', {
   name: {
     type: Sequelize.STRING,
     allowNull: false
@@ -16,7 +16,9 @@ var User = db.define('user', {
   }
 },{
   hooks: {
+
     // encrypt the password before it is stored
+
     beforeValidate: function hashPassword(user){
       var newPass = CryptoJS.SHA3(user.password);
       var encrypted = newPass.toString(CryptoJS.enc.Base64);
@@ -30,8 +32,17 @@ var User = db.define('user', {
       var encrypted = newPass.toString(CryptoJS.enc.Base64);
       return encrypted;
     }
+    // findByName: function(name){
+    //   return this.findOne({
+    //     where: {
+    //       name: name
+    //     }
+    //   })
+    //   .then(function(item){
+    //     return item;
+    //   })
+    // }
   }
-
 })
 
 var Message = db.define('Message', {
@@ -41,7 +52,10 @@ var Message = db.define('Message', {
   }
 })
 
-User.belongsToMany(Message, {through: 'user_message'});
+Message.belongsTo(User);
+
+// User.hasMany(Message);
+// User.hasMany
 
 //set up table for messages and link to users
 

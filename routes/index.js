@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var models = require('../models/db');
 var User = models.User;
+var Message = models.Message;
 
 
 router.get('/', function(req, res, next){
@@ -10,6 +11,39 @@ router.get('/', function(req, res, next){
 
 });
 
+router.get('/getmessage/:user', function(req, res, next){
+
+  console.log(req.params.user);
+  console.log(User);
+
+  Message.findAll({
+    include: [{
+      model: User,
+      where: {
+        name: req.params.user
+      }
+    }]
+    })
+  .then(function(item){
+    console.log(item);
+  })
+
+})
+
+router.post('/message', function(req, res, next){
+  Message.create({
+    message: req.body.message
+  })
+  .then(function(createdMessage){
+    User.findOne({where:{name:req.body.name}})
+    .then(function(user){
+      return createdMessage.setUser(user);
+    })
+
+  })
+  .catch(next);
+  res.send('hello');
+})
 
 router.post('/signup', function(req, res, next){
   User.findOrCreate({

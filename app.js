@@ -11,9 +11,11 @@ var User = models.User;
 var Message = models.Message;
 
 
+
 // app.set('views', __dirname + '/views');
 // app.set('view engine', 'html');
 // app.engine('html', swig.renderFile);
+
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());

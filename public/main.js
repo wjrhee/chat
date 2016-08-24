@@ -9,13 +9,12 @@ var socket = io();
 $('#chatbox').submit(function(){
   socket.emit('chat message', $('#m').val());
   $('#m').val('');
-
   return false;
 });
+
 socket.on('chat message', function(msg){
-  $('#message').append($('<li>').text(people[socket.id] + ': ' + msg));
   $.ajax({
-    url:"/",
+    url:"/message",
     type: "POST",
     data: {
       message: msg,
@@ -28,8 +27,25 @@ socket.on('chat message', function(msg){
       console.log('error in submitting message');
     }
   })
-
+  $('#message').append($('<li>').text(people[socket.id] + ': ' + msg));
 });
+
+$('#getMessages-btn').on('click', function(e){
+  var userMsg = $('#user-msg').val()
+  $.ajax({
+    url:"/getmessage/" + userMsg,
+    type:"GET",
+    success: function(){
+      console.log('getted');
+    },
+    error: function(){
+      console.log('asdf');
+    }
+})
+  e.preventDefault();
+});
+
+
 
 // on signing in, send an ajax post request to the server
 $('#signup-btn').on('click', function(e){
@@ -51,10 +67,12 @@ $('#signup-btn').on('click', function(e){
       console.log('error');
     }
   })
+
   // stay on the same page.
   e.preventDefault();
 
 })
+
 
 // on logging in, send an ajax get request to the server
 $('#login-btn').on('click', function(e){

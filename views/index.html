@@ -4,13 +4,17 @@
   <title>
     mychatapp
   </title>
+  <link href="/bootstrap.css" rel="stylesheet">
 </head>
 <body>
 <div id="logger"></div>
 <div id="message"></div>
+<div id="chat-container">
 <form id="chatbox" action="/">
   <input id="m" autocomplete="off"/><button>send</button>
 </form>
+</div>
+
 <form id="login-form" action="/login">
   <label>username</label>
   <input id="username-login" autocomplete="off"/>
@@ -19,11 +23,16 @@
   <button id="login-btn">login</button>
 </form>
 <form id="signup-form" action="/signup">
+  <label>username</label>
   <input id="username-signup" autocomplete="off"/>
+  <label>password</label>
   <input id="password-signup" autocomplete="off"/>
   <button id="signup-btn">sign up</button>
 </form>
-<button id="decode">decode</button>
+<form id="getMessages" action="/getmessage">
+  <input id="user-msg"/>
+  <button id="getMessages-btn">all users</button>
+</form>
 </body>
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 <script src="/md5.js"></script>
