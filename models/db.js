@@ -8,7 +8,8 @@ var db = new Sequelize('postgres://localhost:5432/chat',{
 var User = db.define('User', {
   name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   password: {
     type: Sequelize.STRING,
@@ -32,16 +33,7 @@ var User = db.define('User', {
       var encrypted = newPass.toString(CryptoJS.enc.Base64);
       return encrypted;
     }
-    // findByName: function(name){
-    //   return this.findOne({
-    //     where: {
-    //       name: name
-    //     }
-    //   })
-    //   .then(function(item){
-    //     return item;
-    //   })
-    // }
+
   }
 })
 
@@ -53,9 +45,6 @@ var Message = db.define('Message', {
 })
 
 Message.belongsTo(User);
-
-// User.hasMany(Message);
-// User.hasMany
 
 //set up table for messages and link to users
 

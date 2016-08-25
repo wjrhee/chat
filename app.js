@@ -22,6 +22,8 @@ app.use(bodyParser.json());
 
 app.use(require('./routes'));
 app.use(express.static('./public'));
+app.use('/', express.static(path.join(__dirname, '/crypto')));
+app.use('/',express.static(path.join(__dirname, '/node_modules')));
 app.use('./components', express.static('./CryptoJS/components'));
 // app.use('/rollups', express.static(__dirname, '/CryptoJS/rollups'));
 

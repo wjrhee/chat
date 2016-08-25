@@ -1,0 +1,23 @@
+#chat-container{
+  width:100%;
+  background:lightblue;
+
+}
+#footer{
+  width:100%;
+  position:fixed;
+  bottom:0;
+  left:0;
+}
+
+#status-bar{
+  width:100%;
+}
+#message-input{
+  width:100%;
+}
+#m{
+  width:calc(100% - 50px);
+}
+
+/*fix css FIX CSS*/

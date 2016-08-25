@@ -4,15 +4,25 @@
 // the people object will hold all of the online users.  it will match the socket id with the username
 var people = {};
 
+var statusUpdate = function(msg){
+  $('#status-bar').text(msg);
+  console.log('running');
+}
+
 // create a socket for the chatbox
 var socket = io();
-$('#chatbox').submit(function(){
+$('#message-input').submit(function(){
   socket.emit('chat message', $('#m').val());
   $('#m').val('');
   return false;
 });
 
 socket.on('chat message', function(msg){
+  var user
+  if(!people[socket.id]){
+    user = "some bum";
+  }
+  else user = people[socket.id];
   $.ajax({
     url:"/message",
     type: "POST",
@@ -27,7 +37,7 @@ socket.on('chat message', function(msg){
       console.log('error in submitting message');
     }
   })
-  $('#message').append($('<li>').text(people[socket.id] + ': ' + msg));
+  $('#chat-container').append($('<li>').text(user + ': ' + msg));
 });
 
 $('#getMessages-btn').on('click', function(e){
@@ -42,6 +52,7 @@ $('#getMessages-btn').on('click', function(e){
       console.log('asdf');
     }
 })
+  $('#user-msg').val('');
   e.preventDefault();
 });
 
@@ -62,11 +73,18 @@ $('#signup-btn').on('click', function(e){
     },
     success: function(data){
       console.log('done');
+      statusUpdate('sign-up successful');
+      // $('#status-bar').text('sign-up successful');
     },
     error: function(){
       console.log('error');
+      statusUpdate('sign-up unsuccessful (possibly a duplicate or something else)');
+      // $('#status-bar').text('sign-up unsuccessful');
     }
   })
+  $('#username-signup').val('');
+  $('#password-signup').val('');
+
 
   // stay on the same page.
   e.preventDefault();
@@ -86,15 +104,20 @@ $('#login-btn').on('click', function(e){
     type: "GET",
     success: function(name){
       // if a name is returned, match it with the socket id, if not, have the user try again
-      if(name) people[socket.id] = name;
-      else console.log('username or password incorrect');
+      if(name){
+        people[socket.id] = name;
+        statusUpdate('login successful');
+      }
+      else statusUpdate('login unsuccessful (possibly an incorrect username or password');
 
-      console.log('done');
     },
     error: function(){
-      console.log('error');
+      statusUpdate('login error');
+
     }
   })
+  $('#username-login').val('');
+  $('#password-login').val('');
   // stay on the same page.
   e.preventDefault();
 
