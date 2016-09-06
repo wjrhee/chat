@@ -1,6 +1,5 @@
 #chat-container{
   width:100%;
-  background:lightblue;
 
 }
 #footer{
@@ -17,7 +16,18 @@
   width:100%;
 }
 #m{
-  width:calc(100% - 50px);
+  width:calc(100% - 80px);
+}
+button{
+  width:70px;
+}
+input{
+  margin: 0 5px 0 0;
 }
 
-/*fix css FIX CSS*/
+.form-control{
+  width: calc(40% - 80px);
+}
+.list-group{
+  list-style-type: none;
+}

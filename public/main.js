@@ -12,15 +12,11 @@ var statusUpdate = function(msg){
 // create a socket for the chatbox
 var socket = io();
 $('#message-input').submit(function(){
-  socket.emit('chat message', $('#m').val());
-  $('#m').val('');
-  return false;
-});
+  var msg = $('#m').val();
+  var user;
 
-socket.on('chat message', function(msg){
-  var user
   if(!people[socket.id]){
-    user = "some bum";
+    user = "anon";
   }
   else user = people[socket.id];
   $.ajax({
@@ -37,39 +33,50 @@ socket.on('chat message', function(msg){
       console.log('error in submitting message');
     }
   })
-  $('#chat-container').append($('<li>').text(user + ': ' + msg));
+  console.log()
+  socket.emit('chat message', {user: user, msg:msg});
+  // $('#chat-container').append($('<li>').text(user + ': ' + msg));
+  $('#m').val('');
+  $('#m').focus();
+  return false;
 });
 
-$('#getMessages-btn').on('click', function(e){
-  var userMsg = $('#user-msg').val()
-  $.ajax({
-    url:"/getmessage/" + userMsg,
-    type:"GET",
-    success: function(){
-      console.log('getted');
-    },
-    error: function(){
-      console.log('asdf');
-    }
-})
-  $('#user-msg').val('');
-  e.preventDefault();
+socket.on('chat message', function(data){
+  console.log(data);
+
+  $('#chat-list').append($('<li>').text(data.user + ': ' + data.msg).addClass('list-group-item'));
 });
 
+// $('#getMessages-btn').on('click', function(e){
+//   var userMsg = $('#user-msg').val()
+//   $.ajax({
+//     url:"/getmessage/" + userMsg,
+//     type:"GET",
+//     success: function(){
+//       console.log('getted');
+//     },
+//     error: function(){
+//       console.log('asdf');
+//     }
+// })
+//   $('#user-msg').val('');
+//   e.preventDefault();
+// });
 
 
-// on signing in, send an ajax post request to the server
+
+// on signing up, send an ajax post request to the server
 $('#signup-btn').on('click', function(e){
   var username = $('#username-signup').val();
-  var pw = CryptoJS.SHA3($('#password-signup').val());
-  var encrypted = pw.toString(CryptoJS.enc.Base64);
+  var pw = $('#password-signup').val();
+  console.log(username, pw);
 
   $.ajax({
     url:"/signup",
     type: 'POST',
     data: {
       name: username,
-      password: encrypted
+      password: pw
     },
     success: function(data){
       console.log('done');
@@ -85,23 +92,23 @@ $('#signup-btn').on('click', function(e){
   $('#username-signup').val('');
   $('#password-signup').val('');
 
-
   // stay on the same page.
   e.preventDefault();
-
 })
 
 
 // on logging in, send an ajax get request to the server
 $('#login-btn').on('click', function(e){
   var loginUserName = $('#username-login').val();
-  var pw = CryptoJS.SHA3($('#password-login').val());
-  var encrypted = pw.toString(CryptoJS.enc.Base64);
-
+  var pw = $('#password-login').val();
 
   $.ajax({
-    url:"/login/" + loginUserName + '/' + encrypted,
-    type: "GET",
+    url:"/login",
+    type: "POST",
+    data: {
+      name: loginUserName,
+      password: pw
+    },
     success: function(name){
       // if a name is returned, match it with the socket id, if not, have the user try again
       if(name){
@@ -109,7 +116,6 @@ $('#login-btn').on('click', function(e){
         statusUpdate('login successful');
       }
       else statusUpdate('login unsuccessful (possibly an incorrect username or password');
-
     },
     error: function(){
       statusUpdate('login error');
@@ -122,7 +128,3 @@ $('#login-btn').on('click', function(e){
   e.preventDefault();
 
 })
-
-
-// ADD HTML AND CSS AND STORE MESSAGES IN THE DATABASE
-// ADD MESSAGES TO THE DATABASE.  CHECK THE AJAX AND FINISH THE EXPRESS ROUTING

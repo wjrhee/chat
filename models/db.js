@@ -1,5 +1,7 @@
-var CryptoJS = require('crypto-js');
+// var CryptoJS = require('crypto-js');
+var bcrypt = require('bcryptjs')
 var Sequelize = require('sequelize');
+//
 var db = new Sequelize('postgres://localhost:5432/chat',{
   logging: true
 });
@@ -14,26 +16,20 @@ var User = db.define('User', {
   password: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  salt: {
+    type: Sequelize.STRING
   }
 },{
   hooks: {
-
     // encrypt the password before it is stored
 
     beforeValidate: function hashPassword(user){
-      var newPass = CryptoJS.SHA3(user.password);
-      var encrypted = newPass.toString(CryptoJS.enc.Base64);
-      user.password = encrypted;
+      var salt = bcrypt.genSaltSync(10);
+      var hash = bcrypt.hashSync(user.password, salt);
+      user.password = hash;
+      user.salt = salt;
     }
-  },
-  classMethods: {
-    // a class method that takes in a password and returns the hashed version.
-    returnEncrypted: function(password){
-      var newPass = CryptoJS.SHA3(password);
-      var encrypted = newPass.toString(CryptoJS.enc.Base64);
-      return encrypted;
-    }
-
   }
 })
 
@@ -44,9 +40,9 @@ var Message = db.define('Message', {
   }
 })
 
+//  link messages to users
 Message.belongsTo(User);
 
-//set up table for messages and link to users
 
 module.exports = {
   User: User,

@@ -4,17 +4,15 @@ var path = require('path');
 var models = require('../models/db');
 var User = models.User;
 var Message = models.Message;
+var bcrypt = require('bcryptjs');
 
 
 router.get('/', function(req, res, next){
   res.sendFile(path.join(__dirname, '../views', 'index.html'));
-
 });
 
+// route for getting all messages from a specific user
 router.get('/getmessage/:user', function(req, res, next){
-
-  console.log(req.params.user);
-  console.log(User);
 
   Message.findAll({
     include: [{
@@ -30,6 +28,7 @@ router.get('/getmessage/:user', function(req, res, next){
 
 })
 
+// route for posting messages
 router.post('/message', function(req, res, next){
   Message.create({
     message: req.body.message
@@ -45,7 +44,10 @@ router.post('/message', function(req, res, next){
   res.send('hello');
 })
 
+// route for creating an account
+
 router.post('/signup', function(req, res, next){
+  console.log(req.body);
   User.findOrCreate({
     where: {
       name: req.body.name,
@@ -60,22 +62,19 @@ router.post('/signup', function(req, res, next){
 })
 
 // router for logging in.
-// router will take the username and password as params
 
-router.get('/login/:userName/:pw', function(req, res, next){
+router.post('/login', function(req, res, next){
 
 // search the database for the specified user
   User.findOne({
     where: {
-      name: req.params.userName
+      name: req.body.name
     }
   })
   .then(function(foundUser){
-    // if the user is found, check if the password matches.
-    // the password is hashed on the client side and then again on the server side
-    // the real password is never sent to the server
+    // check hashed submitted password against the password in the database
     var foundUserName = null;
-    var checkPass = User.returnEncrypted(req.params.pw);
+    var checkPass = bcrypt.hashSync(req.body.password, foundUser.salt);
     if (checkPass === foundUser.password){
       console.log('found!');
       foundUserName = foundUser.name;

@@ -4,52 +4,50 @@
   <title>
     mychatapp
   </title>
-  <link href="/bootstrap.css" rel="stylesheet">
+  <!-- <link href="/bootstrap.css" rel="stylesheet"> -->
   <link href="/main.css" rel="stylesheet">
-  <!-- <script src="/angular/angular.js"></script> -->
+
 </head>
 <body>
-
-<div id="chat-container"></div>
+<div id="chat-container">
+  <ul id="chat-list" class="list-group"></ul>
+</div>
 
 <div id="footer">
   <div id="status-bar"></div>
 
   <div id="message-input-container" class="col-lg-1">
     <form id="message-input" action="/">
-      <input id="m" autocomplete="off"/><button>send</button>
+      <input id="m" autocomplete="off"/><button class="btn btn-primary">send</button>
     </form>
   </div>
 
   <div class="col-lg-1">
-    <form id="login-form" action="/login">
+
       <label>username</label>
-      <input id="username-login" class="user-input" autocomplete="off"/>
+      <input id="username-login" class="form-control" autocomplete="off"/>
       <label>password</label>
-      <input id="password-login" class="user-input" type="password" autocomplete="off"/>
-      <button id="login-btn">login</button>
-    </form>
+      <input id="password-login" class="form-control" type="password" autocomplete="off"/>
+      <button id="login-btn" class="btn btn-primary">login</button>
+
   </div>
-  <form id="signup-form" action="/signup">
-    <label>username</label>
-    <input id="username-signup" class="user-input" autocomplete="off"/>
-    <label>password</label>
-    <input id="password-signup" class="user-input" type="password" autocomplete="off"/>
-    <button id="signup-btn">sign up</button>
-  </form>
-  <form id="getMessages" action="/getmessage">
+  <div class = "col-lg-1">
+      <label>username</label>
+      <input id="username-signup" class="form-control"/>
+      <label>password</label>
+      <input id="password-signup" class="form-control" type="password" autocomplete="off"/>
+      <button id="signup-btn" class="btn btn-primary">sign up</button>
+  </div>
+
+  <!-- <form id="getMessages" action="/getmessage">
     <input id="user-msg"/>
     <button id="getMessages-btn">all users</button>
-  </form>
+  </form> -->
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-<script src="/md5.js"></script>
-<script src="/sha3.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/main.js"></script>
-<script>
 
-</script>
 
 </html>
